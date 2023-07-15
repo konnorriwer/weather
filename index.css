@@ -1,0 +1,28 @@
+html {
+    background-color: rgb(144, 205, 228);
+    font-size: 20px;
+}
+.block {
+    background-color: rgb(27, 155, 197);
+    padding: 6px 18px;
+    color: white;
+    margin: 8px; 
+    min-height: 200px;
+}
+.current {
+    text-align: center;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+#current {
+    font-size: 50px;
+    font-weight: 900;
+}
+p {
+    margin: 0px;
+}
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+}
