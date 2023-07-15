@@ -1,6 +1,7 @@
 html {
     background-color: rgb(144, 205, 228);
     font-size: 20px;
+    font-family: 'Helvetica';
 }
 .block {
     background-color: rgb(27, 155, 197);
