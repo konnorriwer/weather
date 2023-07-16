@@ -1,6 +1,6 @@
 html {
     background-color: rgb(144, 205, 228);
-    font-size: 20px;
+    font-size: 18px;
 }
 .block {
     background-color: rgb(27, 155, 197);
@@ -15,8 +15,9 @@ html {
     grid-column-end: 3;
 }
 #current {
-    font-size: 50px;
-    font-weight: 900;
+    font-size: 45px;
+    font-weight: 100;
+    line-height: 33px;
 }
 p {
     margin: 0px;
