@@ -1,0 +1,111 @@
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaBlack.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaBlackItalic.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaHeavy.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaHeavyItalic.ttf') format('truetype');
+    font-weight: 800;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaBold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaBoldItalic.ttf') format('truetype');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaMedium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaMediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaRegular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaItalic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaLight.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaLightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaThin.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaThinItalic.ttf') format('truetype');
+    font-weight: 200;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaUltraLight.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Helvetica';
+    src: url('fonts/HelveticaUltraLightItalic.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+}

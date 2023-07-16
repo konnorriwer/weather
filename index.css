@@ -1,6 +1,7 @@
 html {
     background-color: rgb(144, 205, 228);
-    font-size: 18px;
+    font-size: 20px;
+    font-family: 'Helvetica';
 }
 .block {
     background-color: rgb(27, 155, 197);
@@ -25,5 +26,4 @@ p {
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-
 }
