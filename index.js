@@ -1,5 +1,5 @@
 async function getForecast() {
-    const result = await fetch("https://api.open-meteo.com/v1/forecast?latitude=43.2567&longitude=76.9286&hourly=temperature_2m&daily=temperature_2m_max,temperature_2m_min&timezone=auto");
+    const result = await fetch("https://api.open-meteo.com/v1/forecast?latitude=43.2567&longitude=76.9286&hourly=temperature_2m,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto");
     const json = await result.json();
     
     const utcOffsetHours = parseInt(json.timezone_abbreviation);
@@ -7,6 +7,9 @@ async function getForecast() {
     currentLocalDateZeroMinutes.setMinutes(0);
     currentLocalDateZeroMinutes.setSeconds(0);
     currentLocalDateZeroMinutes.setMilliseconds(0);
+    
+    const timezone = (json.timezone).split('/');
+    const city = timezone[1];
 
     let localDateTemp = [[], (json.hourly.temperature_2m)];
     const targetDate = new Date(json.hourly.time[0]);
@@ -20,9 +23,11 @@ async function getForecast() {
     };
 
     let currentTemperature = '';
+    let currentWeatherCondition = '';
     for (let j = 0; j < (localDateTemp[0]).length; j++) {
         if (currentLocalDateZeroMinutes.getTime() === localDateTemp[0][j].getTime()) {
             currentTemperature = localDateTemp[1][j];
+            currentWeatherCondition = json.hourly.weathercode[j];
         }
     }
 
@@ -37,11 +42,27 @@ async function getForecast() {
             dailyMinTemp = maxMinTempArray[2][k];
         }
     };
-    
 
-
-    document.getElementById('current_temp').innerText = `${parseInt(dailyMaxTemp)}°`;
-    document.getElementById('max').innerText = `Макс.: ${parseInt(currentTemperature)}°`;
-    document.getElementById('min').innerText = `Мин.: ${parseInt(dailyMinTemp)}°`;
+    document.getElementById('city').innerText = `${city}`;
+    document.getElementById('current_temp').innerText = `${Math.floor(parseFloat(dailyMaxTemp))}°`;
+    document.getElementById('current_condition').innerText = `${weatherCodes[currentWeatherCondition]}`;
+    document.getElementById('max').innerText = `Макс.: ${Math.round(parseFloat(currentTemperature))}°, `;
+    document.getElementById('min').innerText = `Мин.: ${Math.round(parseFloat(dailyMinTemp))}°`;
 }
 getForecast();
+
+
+
+
+
+const weatherCodes = {
+    0: "Ясно",
+    1: "Преимущественно ясно",
+    2: "Частично облачно",
+    3: "Пасмурно",
+    45: "Туман",
+    48: "Туман с изморосью",
+    51: "Слабая изморось",
+    53: "Умеренная изморось",
+    55: "Сильная изморось"
+  }
