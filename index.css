@@ -15,13 +15,17 @@ html {
     grid-column-start: 1;
     grid-column-end: 3;
 }
-#current {
+#current_temp {
     font-size: 45px;
-    font-weight: 100;
+    font-weight: 200;
     line-height: 33px;
 }
+#current_condition, #min, #max {
+    font-size: 16px;
+    font-weight: 500;
+}
 p {
-    margin: 0px;
+    margin: 8px 0;
 }
 .grid {
     display: grid;
