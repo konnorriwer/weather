@@ -50,3 +50,19 @@ async function getForecast() {
     document.getElementById('min').innerText = `Мин.: ${Math.round(parseFloat(dailyMinTemp))}°`;
 }
 getForecast();
+
+
+
+
+
+const weatherCodes = {
+    0: "Ясно",
+    1: "Преимущественно ясно",
+    2: "Частично облачно",
+    3: "Пасмурно",
+    45: "Туман",
+    48: "Туман с изморосью",
+    51: "Слабая изморось",
+    53: "Умеренная изморось",
+    55: "Сильная изморось"
+  }
