@@ -31,3 +31,8 @@ p {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
+.hourly {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    text-align: center;
+}
