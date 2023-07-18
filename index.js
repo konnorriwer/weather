@@ -49,10 +49,8 @@ async function getForecast() {
     
 
 
-    document.getElementById('current').innerText = `${parseInt(dailyMaxTemp)}°`;
-    document.getElementById('max').innerText = `Макс.:${parseInt(currentTemperature)}°`;
-    document.getElementById('min').innerText = `Мин.:${parseInt(dailyMinTemp)}°`;
-
-
+    document.getElementById('current_temp').innerText = `${parseInt(dailyMaxTemp)}°`;
+    document.getElementById('max').innerText = `Макс.: ${parseInt(currentTemperature)}°`;
+    document.getElementById('min').innerText = `Мин.: ${parseInt(dailyMinTemp)}°`;
 }
 getForecast();
