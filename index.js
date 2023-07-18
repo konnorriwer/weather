@@ -45,7 +45,7 @@ async function getForecast() {
 
     document.getElementById('city').innerText = `${city}`;
     document.getElementById('current_temp').innerText = `${Math.floor(parseFloat(dailyMaxTemp))}°`;
-    document.getElementById('current_condition').innerText = `${currentWeatherCondition}`;
+    document.getElementById('current_condition').innerText = `${weatherCodes[currentWeatherCondition]}`;
     document.getElementById('max').innerText = `Макс.: ${Math.round(parseFloat(currentTemperature))}°, `;
     document.getElementById('min').innerText = `Мин.: ${Math.round(parseFloat(dailyMinTemp))}°`;
 }
