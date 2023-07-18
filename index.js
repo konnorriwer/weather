@@ -22,7 +22,6 @@ async function getForecast() {
     const targetUTCDate = new Date(targetDate.setHours(targetDate.getHours() - utcOffsetHours));
     const localTimezoneOffset = new Date().getTimezoneOffset();
     let targetLocalDate = new Date (targetUTCDate.setMinutes(targetUTCDate.getMinutes() - localTimezoneOffset));
-
     for (let i = 0; i < (json.hourly.time).length; i++) {
         localDateTemp[0][i] = targetLocalDate;
         targetLocalDate = structuredClone(targetLocalDate);
@@ -30,20 +29,30 @@ async function getForecast() {
     };
 
     let currentTemperature = '';
-
     for (let j = 0; j < (localDateTemp[0]).length; j++) {
-        console.log(currentLocalDateZeroMinutes);
-        console.log(localDateTemp[0][j]);
         if (currentLocalDateZeroMinutes.getTime() === localDateTemp[0][j].getTime()) {
             currentTemperature = localDateTemp[1][j];
         }
     }
- 
-    console.log(currentTemperature);
+
+    let maxMinTempArray = [[], json.daily.temperature_2m_max, json.daily.temperature_2m_min];
+    let dailyMaxTemp = '';
+    let dailyMinTemp = '';
+    for (let k = 0; k < (json.daily.time).length; k++) {
+        let dailyDate = new Date(json.daily.time[k]);
+        maxMinTempArray[0][k] = dailyDate.getDate();
+        if (maxMinTempArray[0][k] === currentLocalDateZeroMinutes.getDate()) {
+            dailyMaxTemp = maxMinTempArray[1][k];
+            dailyMinTemp = maxMinTempArray[2][k];
+        }
+    };
+    
 
 
-    document.getElementById('current').innerText = `${parseInt(currentTemperature)}°`
+    document.getElementById('current').innerText = `${parseInt(dailyMaxTemp)}°`;
+    document.getElementById('max').innerText = `Макс.:${parseInt(currentTemperature)}°`;
+    document.getElementById('min').innerText = `Мин.:${parseInt(dailyMinTemp)}°`;
 
-// Добавить макс мин
+
 }
 getForecast();
