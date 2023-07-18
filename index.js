@@ -3,15 +3,6 @@ async function getForecast() {
     const json = await result.json();
     
     const utcOffsetHours = parseInt(json.timezone_abbreviation);
-    // const currentLocalHours = new Date().getHours();
-    // const currentLocalMinutes = new Date().getMinutes();
-    // const currentLocalYear = new Date().getFullYear();
-    // let currentLocalMonth = new Date().getMonth();
-    // let currentLocalDay = new Date().getDate();
-    // currentLocalMonth = (currentLocalMonth + 1).toString().padStart(2, '0');
-    // currentLocalDay = currentLocalDay.toString().padStart(2, '0');
-    // const currentLocalDateZeroMinutes = 
-    //     `${currentLocalYear}-${currentLocalMonth}-${currentLocalDay}T${currentLocalHours}:00`;
     let currentLocalDateZeroMinutes = new Date();
     currentLocalDateZeroMinutes.setMinutes(0);
     currentLocalDateZeroMinutes.setSeconds(0);
