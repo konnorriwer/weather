@@ -1,59 +1,106 @@
 async function getForecast() {
-    const result = await fetch("https://api.open-meteo.com/v1/forecast?latitude=43.2567&longitude=76.9286&hourly=temperature_2m,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto");
+    const json = await getForecastFromAPI();
+    const city = getCityName(json);
+    const hourlyWeather = parseHourlyWeather(json);
+    const currentHourlyWeather = getCurrentHourlyWeather(hourlyWeather);
+    const dailyWeather = parseDailyWeather(json);
+    const currentDailyWeather = getCurrentDailyWeather(dailyWeather);
+
+    setContentToPage(city, currentHourlyWeather, currentDailyWeather);
+}
+
+async function getForecastFromAPI() {
+    const url = "https://api.open-meteo.com/v1/forecast?latitude=43.2567&longitude=76.9286&hourly=temperature_2m,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto";
+    const result = await fetch(url);
     const json = await result.json();
-    
-    const utcOffsetHours = parseInt(json.timezone_abbreviation);
-    let currentLocalDateZeroMinutes = new Date();
-    currentLocalDateZeroMinutes.setMinutes(0);
-    currentLocalDateZeroMinutes.setSeconds(0);
-    currentLocalDateZeroMinutes.setMilliseconds(0);
-    
+    return json;
+}
+
+function getNowWithHoursOnly() {
+    let date = new Date();
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    return date;
+}
+
+function getCityName(json) {
     const timezone = (json.timezone).split('/');
     const city = timezone[1];
+    return city;
+}
 
-    let localDateTemp = [[], (json.hourly.temperature_2m)];
+function parseHourlyWeather(json) {   
+    let result = []; 
+    let localTime = getFirstLocalHourlyDate(json);
+
+    for (let i = 0; i < (json.hourly.time).length; i++) {
+        result.push({
+            localTime: structuredClone(localTime),
+            temperature: json.hourly.temperature_2m[i],
+            condition: json.hourly.weathercode[i],
+        });
+
+        localTime.setHours(localTime.getHours() + 1);    
+    };
+
+    return result;
+}
+
+function getFirstLocalHourlyDate(json) {
     const targetDate = new Date(json.hourly.time[0]);
+    const utcOffsetHours = parseInt(json.timezone_abbreviation);
     const targetUTCDate = new Date(targetDate.setHours(targetDate.getHours() - utcOffsetHours));
     const localTimezoneOffset = new Date().getTimezoneOffset();
-    let targetLocalDate = new Date (targetUTCDate.setMinutes(targetUTCDate.getMinutes() - localTimezoneOffset));
-    for (let i = 0; i < (json.hourly.time).length; i++) {
-        localDateTemp[0][i] = targetLocalDate;
-        targetLocalDate = structuredClone(targetLocalDate);
-        targetLocalDate.setHours(targetLocalDate.getHours() + 1);    
-    };
+    return new Date (targetUTCDate.setMinutes(targetUTCDate.getMinutes() - localTimezoneOffset));
+}
 
-    let currentTemperature = '';
-    let currentWeatherCondition = '';
-    for (let j = 0; j < (localDateTemp[0]).length; j++) {
-        if (currentLocalDateZeroMinutes.getTime() === localDateTemp[0][j].getTime()) {
-            currentTemperature = localDateTemp[1][j];
-            currentWeatherCondition = json.hourly.weathercode[j];
+function getCurrentHourlyWeather(hourlyWeather) {
+    const index = getCurrentHourIndex(hourlyWeather);
+
+    return hourlyWeather[index];
+}
+
+function getCurrentHourIndex(hourlyWeather) {
+    let now = getNowWithHoursOnly();
+
+    for (let i = 0; i < hourlyWeather.length; i++) {
+        if (now.getTime() === hourlyWeather[i].localTime.getTime()) {
+            return i;
         }
     }
+}
 
-    let maxMinTempArray = [[], json.daily.temperature_2m_max, json.daily.temperature_2m_min];
-    let dailyMaxTemp = '';
-    let dailyMinTemp = '';
-    for (let k = 0; k < (json.daily.time).length; k++) {
-        let dailyDate = new Date(json.daily.time[k]);
-        maxMinTempArray[0][k] = dailyDate.getDate();
-        if (maxMinTempArray[0][k] === currentLocalDateZeroMinutes.getDate()) {
-            dailyMaxTemp = maxMinTempArray[1][k];
-            dailyMinTemp = maxMinTempArray[2][k];
-        }
+function parseDailyWeather(json) {
+    let result = [];
+
+    for (let i = 0; i < (json.daily.time).length; i++) {
+        result.push({
+            localTime: new Date(json.daily.time[i]),
+            condition: json.daily.weathercode[i],
+            maxTemp: json.daily.temperature_2m_max[i],
+            minTemp: json.daily.temperature_2m_min[i],
+        });
     };
 
-    document.getElementById('city').innerText = `${city}`;
-    document.getElementById('current_temp').innerText = `${Math.floor(parseFloat(dailyMaxTemp))}°`;
-    document.getElementById('current_condition').innerText = `${weatherCodes[currentWeatherCondition]}`;
-    document.getElementById('max').innerText = `Макс.: ${Math.round(parseFloat(currentTemperature))}°, `;
-    document.getElementById('min').innerText = `Мин.: ${Math.round(parseFloat(dailyMinTemp))}°`;
+    return result;
 }
-getForecast();
 
+function getCurrentDailyWeather(dailyWeather) {
+    return dailyWeather[0];
+}
 
+function setContentToPage(city, currentHourlyWeather, currentDailyWeather) {
+    setText('city', city);
+    setText('current_temp', `${Math.round(parseFloat(currentHourlyWeather.temperature))}°`);
+    setText('current_condition', `${weatherCodes[currentHourlyWeather.condition]}`);
+    setText('max', `Макс.: ${Math.round(parseFloat(currentDailyWeather.maxTemp))}°, `);
+    setText('min', `Мин.: ${Math.round(parseFloat(currentDailyWeather.minTemp))}°`);
+}
 
-
+function setText(id, text) {
+    document.getElementById(id).innerText = text;
+}
 
 const weatherCodes = {
     0: "Ясно",
@@ -65,4 +112,18 @@ const weatherCodes = {
     51: "Слабая изморось",
     53: "Умеренная изморось",
     55: "Сильная изморось"
-  }
+}
+
+const weatherCodesImg = {
+    0: '/img/clear.png',
+    1: '/img/partly-cloudy.png',
+    2: '/img/partly-cloudy.png',
+    3: '/img/cloudy.png',
+    45: '/img/fog.png',
+    48: '/img/fog.png',
+    51: '/img/snow.png',
+    53: '/img/snow.png',
+    55: '/img/snow.png'
+}
+
+getForecast();
