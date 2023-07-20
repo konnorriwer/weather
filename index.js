@@ -1,47 +1,12 @@
 async function getForecast() {
-
     const json = await getForecastFromAPI();
-    let currentLocalDateZeroMinutes = getDateWithHoursOnly();
-    let city = getCityName(json);
-    let localDateWeatherAndTemp = [[], (json.hourly.temperature_2m), [], []]; //Дата, темпа, час, погода
-    let targetLocalDate = getTargetLocalDate(json);
+    const city = getCityName(json);
+    const hourlyWeather = parseHourlyWeather(json);
+    const currentHourlyWeather = getCurrentHourlyWeather(hourlyWeather);
+    const dailyWeather = parseDailyWeather(json);
+    const currentDailyWeather = getCurrentDailyWeather(dailyWeather);
 
-    // Ставим даты, темпу, часы и погоду в массив
-    for (let i = 0; i < (json.hourly.time).length; i++) {
-        localDateWeatherAndTemp[0][i] = targetLocalDate;
-        targetLocalDate = structuredClone(targetLocalDate);
-        localDateWeatherAndTemp[2][i] = targetLocalDate.getHours();
-        localDateWeatherAndTemp[3][i] = json.hourly.weathercode[i];
-        targetLocalDate.setHours(targetLocalDate.getHours() + 1);    
-    };
-
-    let currentTemperature = '';
-    let currentWeatherCondition = '';
-    for (let j = 0; j < (localDateWeatherAndTemp[0]).length; j++) {
-        if (currentLocalDateZeroMinutes.getTime() === localDateWeatherAndTemp[0][j].getTime()) {
-            currentTemperature = localDateWeatherAndTemp[1][j];
-            currentWeatherCondition = json.hourly.weathercode[j];
-            for (let l = 0; l < 6; l++) {
-                // let weatherName = weatherCodes[json.hourly.weathercode[j + l]];
-                document.getElementById(`hour${l + 2}`).innerText = `${localDateWeatherAndTemp[2][j + l + 1]}`;
-            }
-        }
-    }
-
-    let maxMinTempArray = [[], json.daily.temperature_2m_max, json.daily.temperature_2m_min];
-    let dailyMaxTemp = '';
-    let dailyMinTemp = '';
-    for (let k = 0; k < (json.daily.time).length; k++) {
-        let dailyDate = new Date(json.daily.time[k]);
-        maxMinTempArray[0][k] = dailyDate.getDate();
-        if (maxMinTempArray[0][k] === currentLocalDateZeroMinutes.getDate()) {
-            dailyMaxTemp = maxMinTempArray[1][k];
-            dailyMinTemp = maxMinTempArray[2][k];
-        }
-    }
-
-    setContentToPage();
-
+    setContentToPage(city, currentHourlyWeather, currentDailyWeather);
 }
 
 async function getForecastFromAPI() {
@@ -51,7 +16,7 @@ async function getForecastFromAPI() {
     return json;
 }
 
-function getDateWithHoursOnly() {
+function getNowWithHoursOnly() {
     let date = new Date();
     date.setMinutes(0);
     date.setSeconds(0);
@@ -65,7 +30,24 @@ function getCityName(json) {
     return city;
 }
 
-function getTargetLocalDate(json) {
+function parseHourlyWeather(json) {   
+    let result = []; 
+    let localTime = getFirstLocalHourlyDate(json);
+
+    for (let i = 0; i < (json.hourly.time).length; i++) {
+        result.push({
+            localTime: structuredClone(localTime),
+            temperature: json.hourly.temperature_2m[i],
+            condition: json.hourly.weathercode[i],
+        });
+
+        localTime.setHours(localTime.getHours() + 1);    
+    };
+
+    return result;
+}
+
+function getFirstLocalHourlyDate(json) {
     const targetDate = new Date(json.hourly.time[0]);
     const utcOffsetHours = parseInt(json.timezone_abbreviation);
     const targetUTCDate = new Date(targetDate.setHours(targetDate.getHours() - utcOffsetHours));
@@ -73,15 +55,52 @@ function getTargetLocalDate(json) {
     return new Date (targetUTCDate.setMinutes(targetUTCDate.getMinutes() - localTimezoneOffset));
 }
 
-function setContentToPage() {
-    document.getElementById('city').innerText = `${city}`;
-    document.getElementById('current_temp').innerText = `${Math.floor(parseFloat(dailyMaxTemp))}°`;
-    document.getElementById('current_condition').innerText = `${weatherCodes[currentWeatherCondition]}`;
-    document.getElementById('max').innerText = `Макс.: ${Math.round(parseFloat(currentTemperature))}°, `;
-    document.getElementById('min').innerText = `Мин.: ${Math.round(parseFloat(dailyMinTemp))}°`;
+function getCurrentHourlyWeather(hourlyWeather) {
+    const index = getCurrentHourIndex(hourlyWeather);
+
+    return hourlyWeather[index];
 }
 
-getForecast();
+function getCurrentHourIndex(hourlyWeather) {
+    let now = getNowWithHoursOnly();
+
+    for (let i = 0; i < hourlyWeather.length; i++) {
+        if (now.getTime() === hourlyWeather[i].localTime.getTime()) {
+            return i;
+        }
+    }
+}
+
+function parseDailyWeather(json) {
+    let result = [];
+
+    for (let i = 0; i < (json.daily.time).length; i++) {
+        result.push({
+            localTime: new Date(json.daily.time[i]),
+            condition: json.daily.weathercode[i],
+            maxTemp: json.daily.temperature_2m_max[i],
+            minTemp: json.daily.temperature_2m_min[i],
+        });
+    };
+
+    return result;
+}
+
+function getCurrentDailyWeather(dailyWeather) {
+    return dailyWeather[0];
+}
+
+function setContentToPage(city, currentHourlyWeather, currentDailyWeather) {
+    setText('city', city);
+    setText('current_temp', `${Math.round(parseFloat(currentHourlyWeather.temperature))}°`);
+    setText('current_condition', `${weatherCodes[currentHourlyWeather.condition]}`);
+    setText('max', `Макс.: ${Math.round(parseFloat(currentDailyWeather.maxTemp))}°, `);
+    setText('min', `Мин.: ${Math.round(parseFloat(currentDailyWeather.minTemp))}°`);
+}
+
+function setText(id, text) {
+    document.getElementById(id).innerText = text;
+}
 
 const weatherCodes = {
     0: "Ясно",
@@ -106,3 +125,5 @@ const weatherCodesImg = {
     53: '/img/snow.png',
     55: '/img/snow.png'
 }
+
+getForecast();
