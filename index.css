@@ -9,9 +9,9 @@ html {
     color: white;
     margin: 8px; 
     min-height: 200px;
+    border-radius: 8px;
 }
-.current {
-    text-align: center;
+.col-2 {
     grid-column-start: 1;
     grid-column-end: 3;
 }
@@ -29,10 +29,18 @@ p {
 }
 .grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
 }
-.hourly {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+.grid-col-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+.grid-col-7 {
+    grid-template-columns: repeat(7, 1fr);
+}
+.text-center {
     text-align: center;
+}
+.block-header {
+    font-size: 15px;
+    color: rgb(196, 233, 246);
+    text-transform: uppercase;
 }
