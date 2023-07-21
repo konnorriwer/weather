@@ -11,9 +11,11 @@ html {
     min-height: 200px;
     border-radius: 8px;
 }
+.col-max {
+    grid-column: 1 / -1;
+}
 .col-2 {
-    grid-column-start: 1;
-    grid-column-end: 3;
+    grid-column: span 2;
 }
 #current_temp {
     font-size: 45px;
@@ -43,4 +45,19 @@ p {
     font-size: 15px;
     color: rgb(196, 233, 246);
     text-transform: uppercase;
+}
+.main-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .main-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .main-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
 }
