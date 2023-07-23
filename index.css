@@ -35,8 +35,8 @@ p {
 .grid-col-2 {
     grid-template-columns: repeat(2, 1fr);
 }
-.grid-col-7 {
-    grid-template-columns: repeat(7, 1fr);
+.grid-col-24 {
+    grid-template-columns: repeat(24, 1fr);
 }
 .text-center {
     text-align: center;
