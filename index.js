@@ -111,7 +111,7 @@ function setHourlyContent(hourlyWeather) {
         
         setText(`hourly-hour-${i + 1}`, hourlyWeather[currentHourIndex + i].localTime.getHours());
         setImg(`hourly-icon-${i + 1}`, weatherCodesImg[hourlyWeather[currentHourIndex + i].condition]);
-        setText(`hourly-temp-${i + 1}`, hourlyWeather[currentHourIndex + i].temperature);
+        setText(`hourly-temp-${i + 1}`, `${hourlyWeather[currentHourIndex + i].temperature}°`);
     }
 }
 
@@ -140,7 +140,7 @@ function getUwuTitle(uwu) {
 function getUwuPeriod(hourlyWeather) {
     let uwuStart = 0;
     let uwuEnd = 0;
-
+ 
     for (let i = 0; i < 24; i++) {
         if (hourlyWeather[i].uwu >= 3) {
             uwuStart = hourlyWeather[i].localTime.getHours();
@@ -181,8 +181,5 @@ const weatherCodesImg = {
     55: './img/snow.png',
     80: './img/heavy-rain.png'
 }
-
-
-
 
 getForecast();
