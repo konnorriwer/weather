@@ -143,6 +143,9 @@ function getUwuPeriod(hourlyWeather) {
             break;
         }
     }
+    if (new Date().getHours() > uwuEnd) {
+        return `Останется низким до конца дня`;
+    }
     
     return `Защищайтесь от солнца с ${uwuStart}:00 до ${uwuEnd}:00`;
 }

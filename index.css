@@ -53,10 +53,11 @@ p {
 .icon {
     width: 30px;
     height: 30px;
+    place-self: center;
 }
 
 .grid-gap {
-    grid-gap: 0 16px;
+    grid-gap: 10px 32px;
 }
 
 .overflow-x {
@@ -67,10 +68,16 @@ p {
     .main-grid {
         grid-template-columns: repeat(4, 1fr);
     }
+    .col-4-lg {
+        grid-column: span 4;
+    }
 }
 
 @media screen and (min-width: 1024px) {
     .main-grid {
         grid-template-columns: repeat(6, 1fr);
+    }
+    .col-4-lg {
+        grid-column: span 4;
     }
 }
