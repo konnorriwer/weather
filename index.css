@@ -17,6 +17,14 @@ html {
 .col-2 {
     grid-column: span 2;
 }
+
+.weekly {
+    grid-row-start: 3;
+    grid-row-end: 6;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
 #current_temp {
     font-size: 45px;
     font-weight: 200;
@@ -34,6 +42,9 @@ p {
 }
 .grid-col-2 {
     grid-template-columns: repeat(2, 1fr);
+}
+.grid-col-3 {
+    grid-template-columns: repeat(3, 1fr);
 }
 .grid-col-24 {
     grid-template-columns: repeat(24, 1fr);
@@ -63,6 +74,14 @@ p {
 .overflow-x {
     overflow: auto;
 }
+
+#uv-number {
+    font-size: 40px;
+}
+
+#uv-title {
+    font-size: 27px;
+} 
 
 @media screen and (min-width: 768px) and (max-width: 1023px) {
     .main-grid {
