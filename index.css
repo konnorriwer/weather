@@ -7,8 +7,6 @@ html {
     background-color: rgb(27, 155, 197);
     padding: 6px 18px;
     color: white;
-    margin: 8px; 
-    min-height: 200px;
     border-radius: 8px;
 }
 .col-max {
@@ -17,14 +15,10 @@ html {
 .col-2 {
     grid-column: span 2;
 }
-
 .weekly {
-    grid-row-start: 3;
-    grid-row-end: 6;
-    grid-column-start: 1;
-    grid-column-end: 3;
+    grid-row: 3 / 6;
+    grid-column: span 2;
 }
-
 #current_temp {
     font-size: 45px;
     font-weight: 200;
@@ -33,6 +27,12 @@ html {
 #current_condition, #min, #max {
     font-size: 16px;
     font-weight: 500;
+}
+#city {
+    font-size: 30px;
+}
+#current_temp {
+    font-size: 50px;
 }
 p {
     margin: 8px 0;
@@ -58,9 +58,11 @@ p {
     text-transform: uppercase;
 }
 .main-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 180px);
+    grid-template-rows: repeat(10, 180px);
+    gap: 16px;
+    justify-content: center;
 }
-
 .icon {
     width: 30px;
     height: 30px;
@@ -74,29 +76,46 @@ p {
 .overflow-x {
     overflow: auto;
 }
-
+#hourly-weather::-webkit-scrollbar {
+    display: none;
+}
 #uv-number {
-    font-size: 40px;
+    font-size: 28px;
 }
 
 #uv-title {
-    font-size: 27px;
+    font-size: 20px;
 } 
-
-@media screen and (min-width: 768px) and (max-width: 1023px) {
+#uv-description {
+    font-size: 16px;
+}
+@media screen and (min-width: 810px) and (max-width: 1204px) {
     .main-grid {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(4, 180px);
+        grid-template-rows: repeat(10, 180px);
     }
     .col-4-lg {
         grid-column: span 4;
+    }
+    .weekly-lg{
+        grid-row-start: 3;
+        grid-row-end: 6;
+        grid-column-start: 1;
+        grid-column-end: 3;
     }
 }
-
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 1205px) {
     .main-grid {
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(6, 180px);
+        grid-template-rows: repeat(10, 180px);
     }
     .col-4-lg {
         grid-column: span 4;
+    }
+    .weekly-lg{
+        grid-row-start: 3;
+        grid-row-end: 6;
+        grid-column-start: 1;
+        grid-column-end: 3;
     }
 }
