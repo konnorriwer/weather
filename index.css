@@ -24,7 +24,7 @@ html {
     font-weight: 200;
     line-height: 33px;
 }
-#current_condition, #min, #max {
+#current_condition, #min, #max, #current_apparent_temperature {
     font-size: 16px;
     font-weight: 500;
 }
