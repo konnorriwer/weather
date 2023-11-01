@@ -9,7 +9,7 @@ async function getForecast() {
     setContentToPage(city, currentWeather, currentDailyWeather, hourlyWeather, dailyWeather);
 }
 async function getForecastFromAPI() {
-    const url = "https://api.open-meteo.com/v1/forecast?latitude=43.2567&longitude=76.9286&hourly=temperature_2m,weathercode,uv_index&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto";
+    const url = "https://api.open-meteo.com/v1/forecast?latitude=43.2567&longitude=76.9286&current=temperature_2m,relativehumidity_2m,apparent_temperature,is_day,precipitation,weathercode,surface_pressure,windspeed_10m,winddirection_10m,windgusts_10m&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,weathercode,surface_pressure,visibility,windspeed_10m,winddirection_10m,windgusts_10m,uv_index,is_day&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_probability_max&windspeed_unit=ms&timezone=auto";
     const result = await fetch(url);
     const json = await result.json();
     return json;
@@ -110,7 +110,7 @@ function setHourlyContent(hourlyWeather) {
 
 function setDailyContent(dailyWeather) {
     for (let i = 0; i < 7; i++) {
-        setText(`daily-day-${i + 1}`, (dailyWeather[i].localTime.getDay()) + 1);
+        setText(`daily-day-${i + 1}`, dayCodes[dailyWeather[i].localTime.getDay()]);
     }
     for (let i = 0; i < 7; i++) {
         setImg(`daily-icon-${i + 1}`, weatherCodesImg[dailyWeather[i].condition]);
@@ -122,9 +122,6 @@ function setDailyContent(dailyWeather) {
         setText(`daily-max-temp-${i + 1}`, `${dailyWeather[i].maxTemp}°`);
     }
 }
-
-// setImg(`hourly-icon-${i + 1}`, weatherCodesImg[hourlyWeather[currentHourIndex + i].condition]);
-// setText(`hourly-temp-${i + 1}`, `${hourlyWeather[currentHourIndex + i].temperature}°`);
 
 function setText(id, text) {
     document.getElementById(id).innerText = text;
@@ -195,6 +192,16 @@ const weatherCodesImg = {
     53: './img/snow.png',
     55: './img/snow.png',
     80: './img/heavy-rain.png'
+}
+
+const dayCodes = {
+    0: 'Вс',
+    1: 'Пн',
+    2: 'Вт',
+    3: 'Ср',
+    4: 'Чт',
+    5: 'Пт',
+    6: 'Сб',
 }
 
 getForecast();

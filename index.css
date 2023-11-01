@@ -16,7 +16,7 @@ html {
     grid-column: span 2;
 }
 .weekly {
-    grid-row: 3 / 6;
+    grid-row: 3 / 5;
     grid-column: span 2;
 }
 #current_temp {
@@ -49,6 +49,9 @@ p {
 .grid-col-24 {
     grid-template-columns: repeat(24, 1fr);
 }
+.grid-col-5 {
+    grid-template-columns: 2fr 1fr 1fr 3fr 1fr;
+}
 .text-center {
     text-align: center;
 }
@@ -69,10 +72,12 @@ p {
     place-self: center;
 }
 
-.grid-gap {
+.grid-gap-10-32 {
     grid-gap: 10px 32px;
 }
-
+.grid-gap-8-32 {
+    grid-gap: 8px 32px;
+}
 .overflow-x {
     overflow: auto;
 }
@@ -99,7 +104,7 @@ p {
     }
     .weekly-lg{
         grid-row-start: 3;
-        grid-row-end: 6;
+        grid-row-end: 5;
         grid-column-start: 1;
         grid-column-end: 3;
     }
@@ -114,7 +119,7 @@ p {
     }
     .weekly-lg{
         grid-row-start: 3;
-        grid-row-end: 6;
+        grid-row-end: 5;
         grid-column-start: 1;
         grid-column-end: 3;
     }
