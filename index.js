@@ -5,10 +5,9 @@ async function getForecast() {
     const currentWeather = getCurrentWeather(hourlyWeather);
     const dailyWeather = parseDailyWeather(json);
     const currentDailyWeather = getCurrentDailyWeather(dailyWeather);
-
-    setContentToPage(city, currentWeather, currentDailyWeather, hourlyWeather);
+    
+    setContentToPage(city, currentWeather, currentDailyWeather, hourlyWeather, dailyWeather);
 }
-
 async function getForecastFromAPI() {
     const url = "https://api.open-meteo.com/v1/forecast?latitude=43.2567&longitude=76.9286&hourly=temperature_2m,weathercode,uv_index&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto";
     const result = await fetch(url);
@@ -31,6 +30,21 @@ function parseHourlyWeather(json) {
             temperature: Math.round(parseFloat(json.hourly.temperature_2m[i])),
             condition: json.hourly.weathercode[i],
             uwu: Math.round(parseFloat(json.hourly.uv_index[i]))
+        });
+    };
+
+    return result;
+}
+
+function parseDailyWeather(json) {
+    let result = [];
+
+    for (let i = 0; i < (json.daily.time).length; i++) {
+        result.push({
+            localTime: new Date(json.daily.time[i]),
+            condition: json.daily.weathercode[i],
+            maxTemp: Math.round(parseFloat(json.daily.temperature_2m_max[i])),
+            minTemp: Math.round(parseFloat(json.daily.temperature_2m_min[i]))
         });
     };
 
@@ -61,20 +75,7 @@ function getCurrentHourIndex(hourlyWeather) {
     }
 }
 
-function parseDailyWeather(json) {
-    let result = [];
 
-    for (let i = 0; i < (json.daily.time).length; i++) {
-        result.push({
-            localTime: new Date(json.daily.time[i]),
-            condition: json.daily.weathercode[i],
-            maxTemp: Math.round(parseFloat(json.daily.temperature_2m_max[i])),
-            minTemp: Math.round(parseFloat(json.daily.temperature_2m_min[i]))
-        });
-    };
-
-    return result;
-}
 
 function getCurrentDailyWeather(dailyWeather) { 
     return dailyWeather[0];
@@ -82,7 +83,7 @@ function getCurrentDailyWeather(dailyWeather) {
 
 // Мозно показать на неделю
 
-function setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourlyWeather) {
+function setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourlyWeather, dailyWeather) {
     setText('city', city);
     setText('current_temp', `${currentHourlyWeather.temperature}°`);
     setText('current_condition', `${weatherCodes[currentHourlyWeather.condition]}`);
@@ -90,6 +91,8 @@ function setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourl
     setText('min', `Мин.: ${currentDailyWeather.minTemp}°`);
     setHourlyContent(hourlyWeather);
     setText(`hourly-hour-1`, "Сейчас");
+    setDailyContent(dailyWeather);
+    setText(`daily-day-1`, "Сегодня");
     setText(`uv-number`, (currentHourlyWeather.uwu));
     setText(`uv-title`, getUwuTitle(currentHourlyWeather.uwu));
     setText(`uv-description`, getUwuPeriod(hourlyWeather));
@@ -104,6 +107,24 @@ function setHourlyContent(hourlyWeather) {
         setText(`hourly-temp-${i + 1}`, `${hourlyWeather[currentHourIndex + i].temperature}°`);
     }
 }
+
+function setDailyContent(dailyWeather) {
+    for (let i = 0; i < 7; i++) {
+        setText(`daily-day-${i + 1}`, (dailyWeather[i].localTime.getDay()) + 1);
+    }
+    for (let i = 0; i < 7; i++) {
+        setImg(`daily-icon-${i + 1}`, weatherCodesImg[dailyWeather[i].condition]);
+    }
+    for (let i = 0; i < 7; i++) {
+        setText(`daily-min-temp-${i + 1}`, `${dailyWeather[i].minTemp}°`);
+    }
+    for (let i = 0; i < 7; i++) {
+        setText(`daily-max-temp-${i + 1}`, `${dailyWeather[i].maxTemp}°`);
+    }
+}
+
+// setImg(`hourly-icon-${i + 1}`, weatherCodesImg[hourlyWeather[currentHourIndex + i].condition]);
+// setText(`hourly-temp-${i + 1}`, `${hourlyWeather[currentHourIndex + i].temperature}°`);
 
 function setText(id, text) {
     document.getElementById(id).innerText = text;
