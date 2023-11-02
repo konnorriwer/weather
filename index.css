@@ -31,9 +31,6 @@ html {
 #city {
     font-size: 30px;
 }
-#current_temp {
-    font-size: 50px;
-}
 p {
     margin: 8px 0;
 }
@@ -84,12 +81,18 @@ p {
 #hourly-weather::-webkit-scrollbar {
     display: none;
 }
+.font-50 {
+    font-size: 50px;
+}
+.font-32 {
+    font-size: 32px;
+}
 .font-28 {
     font-size: 28px;
 }
 .font-20 {
     font-size: 20px;
-} 
+}
 .font-16 {
     font-size: 16px;
 }
