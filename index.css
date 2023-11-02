@@ -84,14 +84,13 @@ p {
 #hourly-weather::-webkit-scrollbar {
     display: none;
 }
-#uv-number {
+.font-28 {
     font-size: 28px;
 }
-
-#uv-title {
+.font-20 {
     font-size: 20px;
 } 
-#uv-description {
+.font-16 {
     font-size: 16px;
 }
 @media screen and (min-width: 810px) and (max-width: 1204px) {
