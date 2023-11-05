@@ -61,7 +61,7 @@ function parseCurrentWeather(json) {
         localTime: json.current.time,
         temperature: Math.round(parseFloat(json.current.temperature_2m)),
         apparentTemperature: Math.round(parseFloat(json.current.apparent_temperature)),        
-        // humidity: json.current.relativehumidity_2m,
+        humidity: json.current.relativehumidity_2m,
         // pressure: json.current.surface_pressure,
         windSpeed: Math.round(json.current.windspeed_10m),
         windDirection: json.current.winddirection_10m,
@@ -166,9 +166,12 @@ function setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourl
     setText('temperature-difference', getTemperatureDifference(currentWeather));
 
     setText('precipitation-sum', `${Math.round(parseFloat(currentDailyWeather.precipitation))} мм`);
-    debugger
+    
+
     setText('visibility-km', `${currentHourlyWeather.visibility} км`);
-    setText('visibility-title', getVisibilityTitle(currentHourlyWeather))
+    setText('visibility-title', getVisibilityTitle(currentHourlyWeather));
+
+    setText('humidity-percentage', `${currentWeather.humidity} %`);
 }
 
 function setHourlyContent(hourlyWeather) {
