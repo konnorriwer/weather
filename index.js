@@ -30,7 +30,8 @@ function parseHourlyWeather(json) {
             localTime: getActualLocalDate(json, json.hourly.time[i]),
             temperature: Math.round(parseFloat(json.hourly.temperature_2m[i])),
             condition: json.hourly.weathercode[i],
-            uv: Math.round(parseFloat(json.hourly.uv_index[i]))
+            uv: Math.round(parseFloat(json.hourly.uv_index[i])),
+            visibility: (Math.round(parseFloat(json.hourly.visibility)) / 1000),
         });
     };
 
@@ -62,9 +63,9 @@ function parseCurrentWeather(json) {
         apparentTemperature: Math.round(parseFloat(json.current.apparent_temperature)),        
         // humidity: json.current.relativehumidity_2m,
         // pressure: json.current.surface_pressure,
-        windSpeed: json.current.windspeed_10m,
+        windSpeed: Math.round(json.current.windspeed_10m),
         windDirection: json.current.winddirection_10m,
-        windGusts: json.current.windgusts_10m,
+        windGusts: Math.round(json.current.windgusts_10m),
         isDay: json.current.is_day,
     }
 
@@ -118,7 +119,23 @@ function getWindDirection(currentWeather) {
     return direction;
 }
 
+function getTemperatureDifference(currentWeather) {
+    if (currentWeather.apparentTemperature > currentWeather.temperature) {
+        return 'Ощущается теплее';
+    } else if (currentWeather.apparentTemperature < currentWeather.temperature) {
+        return 'Ощущается холоднее';
+    } else {
+        return 'Совпадает с фактической';
+    }
+}
 
+function getVisibilityTitle(currentHourlyWeather) {
+    for (let i = 0; i < visibilityTitles.length; i++) {
+        if (currentHourlyWeather.visibility <= visibilityTitles[i].max) {
+            return visibilityTitles[i].title;
+        }
+    }
+}
 
 function setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourlyWeather, dailyWeather, currentWeather) {
     setText('city', city);
@@ -146,9 +163,12 @@ function setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourl
 
     setText('apparent-temperature', `${currentWeather.apparentTemperature}°`);
     setText('actual-temperature', `Факт.: ${currentWeather.temperature}°`);
+    setText('temperature-difference', getTemperatureDifference(currentWeather));
 
     setText('precipitation-sum', `${Math.round(parseFloat(currentDailyWeather.precipitation))} мм`);
-
+    debugger
+    setText('visibility-km', `${currentHourlyWeather.visibility} км`);
+    setText('visibility-title', getVisibilityTitle(currentHourlyWeather))
 }
 
 function setHourlyContent(hourlyWeather) {
@@ -231,6 +251,7 @@ const weatherCodes = {
     51: "Слабая изморось",
     53: "Умеренная изморось",
     55: "Сильная изморось",
+    61: "Дождь",
     80: "Небольшой ливень"
 }
 
@@ -244,6 +265,7 @@ const weatherCodesImg = {
     51: './img/snow.png',
     53: './img/snow.png',
     55: './img/snow.png',
+    61: './img/rain.png',
     80: './img/heavy-rain.png'
 }
 
@@ -275,6 +297,15 @@ const windDirectionCodes = {
     15: 'С',
     16: 'С',
 }
+
+const visibilityTitles = [
+    {max: 0.2, title: 'Густой туман'},
+    {max: 1, title: 'Умеренный туман'},
+    {max: 4, title: 'Легкий туман'},
+    {max: 10, title: 'Дымка'},
+    {max: 20, title: 'Хорошая видимость'},
+    {max: 25, title: 'Идеальная видимость'},
+]
 
 getForecast();
 
