@@ -30,7 +30,8 @@ function parseHourlyWeather(json) {
             localTime: getActualLocalDate(json, json.hourly.time[i]),
             temperature: Math.round(parseFloat(json.hourly.temperature_2m[i])),
             condition: json.hourly.weathercode[i],
-            uv: Math.round(parseFloat(json.hourly.uv_index[i]))
+            uv: Math.round(parseFloat(json.hourly.uv_index[i])),
+            visibility: (Math.round(parseFloat(json.hourly.visibility)) / 1000),
         });
     };
 
@@ -48,6 +49,7 @@ function parseDailyWeather(json) {
             minTemp: Math.round(parseFloat(json.daily.temperature_2m_min[i])),
             sunrise: json.daily.sunrise[i],
             sunset: json.daily.sunset[i],
+            precipitation: json.daily.precipitation_sum[i],
         });
     };
 
@@ -61,9 +63,9 @@ function parseCurrentWeather(json) {
         apparentTemperature: Math.round(parseFloat(json.current.apparent_temperature)),        
         // humidity: json.current.relativehumidity_2m,
         // pressure: json.current.surface_pressure,
-        windSpeed: json.current.windspeed_10m,
+        windSpeed: Math.round(json.current.windspeed_10m),
         windDirection: json.current.winddirection_10m,
-        windGusts: json.current.windgusts_10m,
+        windGusts: Math.round(json.current.windgusts_10m),
         isDay: json.current.is_day,
     }
 
@@ -103,11 +105,11 @@ function getSunriseSunset(currentWeather, currentDailyWeather, dailyWeather) {
     let currentDaySunset = new Date(currentDailyWeather.sunset);
 
     if (currentWeather.isDay === 0 && new Date(currentWeather.localTime).getTime() <= currentDaySunrise.getTime()) {         // Утро, темно
-        return ['Восход солнца', currentDailyWeather.sunrise.slice(-5), `Заход солнца в: ${currentDailyWeather.sunset.slice(-5)}`];      
+        return ['Восход', currentDailyWeather.sunrise.slice(-5), `Заход в: ${currentDailyWeather.sunset.slice(-5)}`];      
     } else if (currentWeather.isDay === 1) {                                                                                 //День, светло
-        return ['Заход солнца', currentDailyWeather.sunset.slice(-5), `Восход солнца в: ${dailyWeather[1].sunrise.slice(-5)}`];
+        return ['Заход', currentDailyWeather.sunset.slice(-5), `Восход в: ${dailyWeather[1].sunrise.slice(-5)}`];
     } else if (currentWeather.isDay === 0 && new Date(currentWeather.localTime).getTime() > currentDaySunset.getTime()) {    //Вечер, темно
-        return ['Восход солнца', dailyWeather[1].sunrise.slice(-5), `Заход солнца в: ${dailyWeather[1].sunset.slice(-5)}`];
+        return ['Восход', dailyWeather[1].sunrise.slice(-5), `Заход в: ${dailyWeather[1].sunset.slice(-5)}`];
     }
 }
 
@@ -115,6 +117,24 @@ function getWindDirection(currentWeather) {
     let direction = Math.round((parseInt(currentWeather.windDirection) / 22.5));
 
     return direction;
+}
+
+function getTemperatureDifference(currentWeather) {
+    if (currentWeather.apparentTemperature > currentWeather.temperature) {
+        return 'Ощущается теплее';
+    } else if (currentWeather.apparentTemperature < currentWeather.temperature) {
+        return 'Ощущается холоднее';
+    } else {
+        return 'Совпадает с фактической';
+    }
+}
+
+function getVisibilityTitle(currentHourlyWeather) {
+    for (let i = 0; i < visibilityTitles.length; i++) {
+        if (currentHourlyWeather.visibility <= visibilityTitles[i].max) {
+            return visibilityTitles[i].title;
+        }
+    }
 }
 
 function setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourlyWeather, dailyWeather, currentWeather) {
@@ -142,6 +162,13 @@ function setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourl
     setText('wind-gusts', `Порывы до: ${currentWeather.windGusts} м/с`);
 
     setText('apparent-temperature', `${currentWeather.apparentTemperature}°`);
+    setText('actual-temperature', `Факт.: ${currentWeather.temperature}°`);
+    setText('temperature-difference', getTemperatureDifference(currentWeather));
+
+    setText('precipitation-sum', `${Math.round(parseFloat(currentDailyWeather.precipitation))} мм`);
+    debugger
+    setText('visibility-km', `${currentHourlyWeather.visibility} км`);
+    setText('visibility-title', getVisibilityTitle(currentHourlyWeather))
 }
 
 function setHourlyContent(hourlyWeather) {
@@ -385,6 +412,15 @@ const windDirectionCodes = {
     15: 'С',
     16: 'С',
 }
+
+const visibilityTitles = [
+    {max: 0.2, title: 'Густой туман'},
+    {max: 1, title: 'Умеренный туман'},
+    {max: 4, title: 'Легкий туман'},
+    {max: 10, title: 'Дымка'},
+    {max: 20, title: 'Хорошая видимость'},
+    {max: 25, title: 'Идеальная видимость'},
+]
 
 getForecast();
 
