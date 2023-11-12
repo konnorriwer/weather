@@ -166,6 +166,7 @@ function setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourl
     setText('temperature-difference', getTemperatureDifference(currentWeather));
 
     setText('precipitation-sum', `${Math.round(parseFloat(currentDailyWeather.precipitation))} мм`);
+    setText(`precipitation-forecast`, getFalloutDescription(hourlyWeather, dailyWeather));
     
 
     setText('visibility-km', `${currentHourlyWeather.visibility} км`);
@@ -220,6 +221,31 @@ function getUVTitle(uv) {
 
     return "Крайне высокий";
 }
+
+function getFalloutDescription(hourlyWeather, dailyWeather) {
+    let start = 0;
+    let end = 0;
+    let fallout;
+
+    for (let i = 0; i < 24; i++) {
+        const weathercode = hourlyWeather[i].condition;
+        const hourlyFallout = weatherCodes[weathercode].fallout;
+        if (hourlyFallout) {
+            start = hourlyWeather[i].localTime.getHours();
+            fallout = hourlyFallout;
+            break;
+        }
+    };
+    for (let j = 23; j >= 0; j--) {
+        const weathercode = hourlyWeather[j].condition;
+        const hourlyFallout = weatherCodes[weathercode].fallout;
+        if (hourlyFallout) {
+            end = hourlyWeather[j].localTime.getHours();
+            break;
+        }
+    }  
+    return `Ожидается ${fallout} с ${start}:00 по ${end}:00`;
+} 
 
 function getUVPeriod(hourlyWeather) {
     let uvStart = 0;
@@ -279,96 +305,115 @@ const weatherCodes = {
         ru: "Слабая морось",
         iconDay: "./img/drizzle.png",
         iconNight: "./img/drizzle-night.png",
+        fallout: "дождь",
     },
     53: {
         ru: "Умеренная морось",
         iconDay: "./img/drizzle.png",
         iconNight: "./img/drizzle-night.png",
+        fallout: "дождь",
     },
     55: {
         ru: "Cильная морось",
         iconDay: "./img/drizzle.png",
         iconNight: "./img/drizzle-night.png",
+        fallout: "дождь",
     },
     56: {
         ru: "Слабая изморось",
         iconDay: "./img/drizzle.png",
         iconNight: "./img/drizzle-night.png",
+        fallout: "дождь",
     },
     57: {
         ru: "Сильная изморось",
         iconDay: "./img/drizzle.png",
         iconNight: "./img/drizzle-night.png",
+        fallout: "дождь",
     },
     61: {
         ru: "Слабый дождь",
         iconDay: "./img/rain.png",
         iconNight: "./img/rain.png",
+        fallout: "дождь",
     },
     63: {
     ru: "Умеренный дождь",
         iconDay: "./img/rain.png",
         iconNight: "./img/rain.png",
+        fallout: "дождь",
     },
     65: {
         ru: "Сильный дождь",
         iconDay: "./img/heavy-rain.png",
         iconNight: "./img/heavy-rain.png",
+        fallout: "дождь",
     },
     66: {
         ru: "Слабый мокрый снег",
         iconDay: "./img/snow-rain.png",
         iconNight: "./img/snow-rain.png",
+        fallout: "снег",
     },
     67: {
         ru: "Сильный мокрый снег",
         iconDay: "./img/snow-rain.png",
         iconNight: "./img/snow-rain.png",
+        fallout: "снег",
     },
     71: {
         ru: "Слабый снегопад",
         iconDay: "./img/snow.png",
         iconNight: "./img/snow.png",
+        fallout: "снег",
     },
     73: {
         ru: "Умеренный снегопад",
         iconDay: "./img/snow.png",
         iconNight: "./img/snow.png",
+        fallout: "снег",
     },
     75: {
         ru: "Сильный снегопад",
         iconDay: "./img/heavy-snow.png",
         iconNight: "./img/heavy-snow.png",
+        fallout: "снег",
     },
     77: {
         ru: "Снег",
         iconDay: "./img/snow.png",
         iconNight: "./img/snow.png",
+        fallout: "снег",
     },
     80: {
         ru: "Ливень",
         iconDay: "./img/heavy-rain.png",
         iconNight: "./img/heavy-rain.png", 
+        fallout: "дождь",
     },
     81: {
         ru: "Ливень",
         iconDay: "./img/heavy-rain.png",
         iconNight: "./img/heavy-rain.png",
+        fallout: "дождь",
     },
     82: {
         ru: "Cильный ливень",
         iconDay: "./img/heavy-rain.png",
         iconNight: "./img/heavy-rain.png",
+        fallout: "дождь",
     },
     85: {
         ru: "Метель",
         iconDay: "./img/heavy-snow.png",
         iconNight: "./img/heavy-snow.png",
+        fallout: "снег",
     },
     86: {
         ru: "Cильный метель",
         iconDay: "./img/heavy-snow.png",
         iconNight: "./img/heavy-snow.png",
+        fallout: "снег",
     },
     95: {
         ru: "Гроза",
@@ -379,11 +424,13 @@ const weatherCodes = {
         ru: "Гроза с градом",
         iconDay: "./img/thunder.png",
         iconNight: "./img/thunder.png",
+        fallout: "град",
     },
     99: {
         ru: "Гроза с сильным градом",
         iconDay: "./img/thunder.png",
         iconNight: "./img/thunder.png",
+        fallout: "град",
     },
 }
 
