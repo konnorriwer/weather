@@ -1,3 +1,5 @@
+
+
 async function getForecast() {
     const json = await getForecastFromAPI();
     const city = getCityName(json);
@@ -186,7 +188,9 @@ function setHourlyContent(hourlyWeather) {
 
 function setDailyContent(dailyWeather) {
     for (let i = 0; i < 7; i++) {
-        setText(`daily-day-${i + 1}`, dayCodes[dailyWeather[i].localTime.getDay()]);
+        let options = { weekday: "short" };
+        
+        setText(`daily-day-${i + 1}`, (new Intl.DateTimeFormat("ru-RU", options).format(dailyWeather[i].localTime)).toUpperCase());
     }
     for (let i = 0; i < 7; i++) {
         setImg(`daily-icon-${i + 1}`, weatherCodes[dailyWeather[i].condition].iconDay);
@@ -244,188 +248,4 @@ function getUVPeriod(hourlyWeather) {
     return `Защищайтесь от солнца с ${uvStart}:00 до ${uvEnd}:00`;
 }
 
-const weatherCodes = {
-    0: {
-        ru: "Ясно",
-        iconDay: "./img/clear.png",
-        iconNight: "./img/clear-night.png",
-    },
-    1: {
-        ru: "Преимущественно ясно", 
-        iconDay: "./img/partly-cloudy.png",
-        iconNight: "./img/partly-cloudy-night.png,"
-    },
-    2: {
-        ru: "Частично облачно", 
-        iconDay: "./img/partly-cloudy.png",
-        iconNight: "./img/partly-cloudy-night.png,"
-    },
-    3: {
-        ru: "Пасмурно", 
-        iconDay: "./img/partly-cloudy.png",
-        iconNight: "./img/partly-cloudy-night.png,"
-    },
-    45: {
-        ru: "Туман",
-        iconDay: "./img/fog.png",
-        iconNight: "./img/fog.png",
-    },
-    48: {
-        ru: "Туман c изморосью",
-        iconDay: "./img/fog.png",
-        iconNight: "./img/fog.png",
-    },
-    51: {
-        ru: "Слабая морось",
-        iconDay: "./img/drizzle.png",
-        iconNight: "./img/drizzle-night.png",
-    },
-    53: {
-        ru: "Умеренная морось",
-        iconDay: "./img/drizzle.png",
-        iconNight: "./img/drizzle-night.png",
-    },
-    55: {
-        ru: "Cильная морось",
-        iconDay: "./img/drizzle.png",
-        iconNight: "./img/drizzle-night.png",
-    },
-    56: {
-        ru: "Слабая изморось",
-        iconDay: "./img/drizzle.png",
-        iconNight: "./img/drizzle-night.png",
-    },
-    57: {
-        ru: "Сильная изморось",
-        iconDay: "./img/drizzle.png",
-        iconNight: "./img/drizzle-night.png",
-    },
-    61: {
-        ru: "Слабый дождь",
-        iconDay: "./img/rain.png",
-        iconNight: "./img/rain.png",
-    },
-    63: {
-    ru: "Умеренный дождь",
-        iconDay: "./img/rain.png",
-        iconNight: "./img/rain.png",
-    },
-    65: {
-        ru: "Сильный дождь",
-        iconDay: "./img/heavy-rain.png",
-        iconNight: "./img/heavy-rain.png",
-    },
-    66: {
-        ru: "Слабый мокрый снег",
-        iconDay: "./img/snow-rain.png",
-        iconNight: "./img/snow-rain.png",
-    },
-    67: {
-        ru: "Сильный мокрый снег",
-        iconDay: "./img/snow-rain.png",
-        iconNight: "./img/snow-rain.png",
-    },
-    71: {
-        ru: "Слабый снегопад",
-        iconDay: "./img/snow.png",
-        iconNight: "./img/snow.png",
-    },
-    73: {
-        ru: "Умеренный снегопад",
-        iconDay: "./img/snow.png",
-        iconNight: "./img/snow.png",
-    },
-    75: {
-        ru: "Сильный снегопад",
-        iconDay: "./img/heavy-snow.png",
-        iconNight: "./img/heavy-snow.png",
-    },
-    77: {
-        ru: "Снег",
-        iconDay: "./img/snow.png",
-        iconNight: "./img/snow.png",
-    },
-    80: {
-        ru: "Ливень",
-        iconDay: "./img/heavy-rain.png",
-        iconNight: "./img/heavy-rain.png", 
-    },
-    81: {
-        ru: "Ливень",
-        iconDay: "./img/heavy-rain.png",
-        iconNight: "./img/heavy-rain.png",
-    },
-    82: {
-        ru: "Cильный ливень",
-        iconDay: "./img/heavy-rain.png",
-        iconNight: "./img/heavy-rain.png",
-    },
-    85: {
-        ru: "Метель",
-        iconDay: "./img/heavy-snow.png",
-        iconNight: "./img/heavy-snow.png",
-    },
-    86: {
-        ru: "Cильный метель",
-        iconDay: "./img/heavy-snow.png",
-        iconNight: "./img/heavy-snow.png",
-    },
-    95: {
-        ru: "Гроза",
-        iconDay: "./img/thunder.png",
-        iconNight: "./img/thunder.png",
-    },
-    96: {
-        ru: "Гроза с градом",
-        iconDay: "./img/thunder.png",
-        iconNight: "./img/thunder.png",
-    },
-    99: {
-        ru: "Гроза с сильным градом",
-        iconDay: "./img/thunder.png",
-        iconNight: "./img/thunder.png",
-    },
-}
-
-const dayCodes = {
-    0: 'Вс',
-    1: 'Пн',
-    2: 'Вт',
-    3: 'Ср',
-    4: 'Чт',
-    5: 'Пт',
-    6: 'Сб',
-}
-
-const windDirectionCodes = {
-    1: 'СВ',
-    2: 'СВ',
-    3: 'В',
-    4: 'В',
-    5: 'ЮВ',
-    6: 'ЮВ',
-    7: 'Ю',
-    8: 'Ю',
-    9: 'ЮЗ',
-    10: 'ЮЗ',
-    11: 'З',
-    12: 'З',
-    13: 'СЗ',
-    14: 'СЗ',
-    15: 'С',
-    16: 'С',
-}
-
-const visibilityTitles = [
-    {max: 0.2, title: 'Густой туман'},
-    {max: 1, title: 'Умеренный туман'},
-    {max: 4, title: 'Легкий туман'},
-    {max: 10, title: 'Дымка'},
-    {max: 20, title: 'Хорошая видимость'},
-    {max: 25, title: 'Идеальная видимость'},
-]
-
 getForecast();
-
-//Защита УВ, если время защиты прошло, не писать текст про защиту
-// Мозно показать на неделю прогноз
