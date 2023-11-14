@@ -168,6 +168,7 @@ function setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourl
     setText('temperature-difference', getTemperatureDifference(currentWeather));
 
     setText('precipitation-sum', `${Math.round(parseFloat(currentDailyWeather.precipitation))} мм`);
+    setText(`precipitation-forecast`, getFalloutDescription(hourlyWeather, dailyWeather));
     
 
     setText('visibility-km', `${currentHourlyWeather.visibility} км`);
@@ -224,6 +225,31 @@ function getUVTitle(uv) {
 
     return "Крайне высокий";
 }
+
+function getFalloutDescription(hourlyWeather, dailyWeather) {
+    let start = 0;
+    let end = 0;
+    let fallout;
+
+    for (let i = 0; i < 24; i++) {
+        const weathercode = hourlyWeather[i].condition;
+        const hourlyFallout = weatherCodes[weathercode].fallout;
+        if (hourlyFallout) {
+            start = hourlyWeather[i].localTime.getHours();
+            fallout = hourlyFallout;
+            break;
+        }
+    };
+    for (let j = 23; j >= 0; j--) {
+        const weathercode = hourlyWeather[j].condition;
+        const hourlyFallout = weatherCodes[weathercode].fallout;
+        if (hourlyFallout) {
+            end = hourlyWeather[j].localTime.getHours();
+            break;
+        }
+    }  
+    return `Ожидается ${fallout} с ${start}:00 по ${end}:00`;
+} 
 
 function getUVPeriod(hourlyWeather) {
     let uvStart = 0;
