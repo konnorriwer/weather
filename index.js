@@ -1,7 +1,5 @@
-
-
-async function getForecast() {
-    const json = await getForecastFromAPI();
+async function getForecast(latitude, longitude) {
+    const json = await getForecastFromAPI(latitude, longitude);
     const city = getCityName(json);
     const hourlyWeather = parseHourlyWeather(json);
     const currentHourlyWeather = getCurrentHourlyWeather(hourlyWeather);
@@ -11,11 +9,21 @@ async function getForecast() {
     
     setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourlyWeather, dailyWeather, currentWeather);
 }
-async function getForecastFromAPI() {
-    const url = "https://api.open-meteo.com/v1/forecast?latitude=43.2567&longitude=76.9286&current=temperature_2m,relativehumidity_2m,apparent_temperature,is_day,precipitation,weathercode,surface_pressure,windspeed_10m,winddirection_10m,windgusts_10m&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,weathercode,surface_pressure,visibility,windspeed_10m,winddirection_10m,windgusts_10m,uv_index,is_day&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_probability_max&windspeed_unit=ms&timezone=auto";
+async function getForecastFromAPI(latitude, longitude) {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relativehumidity_2m,apparent_temperature,is_day,precipitation,weathercode,surface_pressure,windspeed_10m,winddirection_10m,windgusts_10m&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,weathercode,surface_pressure,visibility,windspeed_10m,winddirection_10m,windgusts_10m,uv_index,is_day&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_probability_max&windspeed_unit=ms&timezone=auto`;
     const result = await fetch(url);
     const json = await result.json();
     return json;
+}
+
+async function getCityFromAPI() {
+    const city = document.getElementById("input").value;
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=en&format=json`;
+    const result = await fetch(url);
+    const json = await result.json();
+    const latitude = json.results[0].latitude;
+    const longitude = json.results[0].longitude;
+    await getForecast(latitude, longitude);
 }
 
 function getCityName(json) {
@@ -274,4 +282,4 @@ function getUVPeriod(hourlyWeather) {
     return `Защищайтесь от солнца с ${uvStart}:00 до ${uvEnd}:00`;
 }
 
-getForecast();
+getForecast(43.25667, 76.92861);

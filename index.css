@@ -16,8 +16,12 @@ html {
     grid-column: span 2;
 }
 .weekly {
-    grid-row: 3 / 5;
+    grid-row: 4 / 6;
     grid-column: span 2;
+}
+.search-block {
+    height: 28px;
+    align-self: end;
 }
 #current_temp {
     font-size: 45px;
@@ -69,6 +73,7 @@ p {
     place-self: center;
 }
 
+
 .grid-gap-10-32 {
     grid-gap: 10px 32px;
 }
@@ -105,8 +110,8 @@ p {
         grid-column: span 4;
     }
     .weekly-lg{
-        grid-row-start: 3;
-        grid-row-end: 5;
+        grid-row-start: 4;
+        grid-row-end: 6;
         grid-column-start: 1;
         grid-column-end: 3;
     }
@@ -120,8 +125,8 @@ p {
         grid-column: span 4;
     }
     .weekly-lg{
-        grid-row-start: 3;
-        grid-row-end: 5;
+        grid-row-start: 4;
+        grid-row-end: 6;
         grid-column-start: 1;
         grid-column-end: 3;
     }
