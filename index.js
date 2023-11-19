@@ -272,7 +272,25 @@ function getFalloutDescription(hourlyWeather, dailyWeather) {
         }
     }
 
-    return `Ожидается ${fallout} с ${start}:00 по ${end}:00`;
+    if (fallout) {
+        return `Ожидается ${fallout} с ${start}:00 по ${end}:00`;
+    }
+    
+    let day;
+    let options = { weekday: "long" };
+
+    for (let i = 0; i < 7; i++) {
+        const weathercode = dailyWeather[i].condition;
+        const dailyFallout = weatherCodes[weathercode].fallout;
+        if (dailyFallout) {
+            fallout = dailyFallout;
+            day = new Intl.DateTimeFormat("ru-RU", options).format(dailyWeather[i].localTime);
+        }
+    }
+    if (fallout) {
+        return `Ожидается ${fallout} в ${day}`;
+    }
+    return `В ближайшую неделю осадков не ожидается`;
 } 
 
 function getUVPeriod(hourlyWeather) {
