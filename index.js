@@ -1,6 +1,16 @@
+let latitude = 43.25667;
+let longitude = 76.92861;
+
+if (localStorage.getItem('latitude') && localStorage.getItem('longitude')) {
+    latitude = localStorage.getItem('latitude');
+    longitude = localStorage.getItem('longitude');
+}
+
 async function getForecast(latitude, longitude) {
     const json = await getForecastFromAPI(latitude, longitude);
+    
     const city = getCityName(json);
+
     const hourlyWeather = parseHourlyWeather(json);
     const currentHourlyWeather = getCurrentHourlyWeather(hourlyWeather);
     const dailyWeather = parseDailyWeather(json);
@@ -9,6 +19,7 @@ async function getForecast(latitude, longitude) {
     
     setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourlyWeather, dailyWeather, currentWeather);
 }
+
 async function getForecastFromAPI(latitude, longitude) {
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relativehumidity_2m,apparent_temperature,is_day,precipitation,weathercode,surface_pressure,windspeed_10m,winddirection_10m,windgusts_10m&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,weathercode,surface_pressure,visibility,windspeed_10m,winddirection_10m,windgusts_10m,uv_index,is_day&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_probability_max&windspeed_unit=ms&timezone=auto`;
     const result = await fetch(url);
@@ -23,6 +34,8 @@ async function getCityFromAPI() {
     const json = await result.json();
     const latitude = json.results[0].latitude;
     const longitude = json.results[0].longitude;
+    localStorage.setItem('latitude', latitude);
+    localStorage.setItem('longitude', longitude);
     await getForecast(latitude, longitude);
 }
 
@@ -282,4 +295,4 @@ function getUVPeriod(hourlyWeather) {
     return `Защищайтесь от солнца с ${uvStart}:00 до ${uvEnd}:00`;
 }
 
-getForecast(43.25667, 76.92861);
+getForecast(latitude, longitude);
