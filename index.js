@@ -85,7 +85,7 @@ function parseCurrentWeather(json) {
         temperature: Math.round(parseFloat(json.current.temperature_2m)),
         apparentTemperature: Math.round(parseFloat(json.current.apparent_temperature)),        
         humidity: json.current.relativehumidity_2m,
-        // pressure: json.current.surface_pressure,
+        pressure: Math.round(json.current.surface_pressure*100/133.3),
         windSpeed: Math.round(json.current.windspeed_10m),
         windDirection: json.current.winddirection_10m,
         windGusts: Math.round(json.current.windgusts_10m),
@@ -196,6 +196,8 @@ function setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourl
     setText('visibility-title', getVisibilityTitle(currentHourlyWeather));
 
     setText('humidity-percentage', `${currentWeather.humidity} %`);
+
+    setText('pressure', `${currentWeather.pressure} мм рт. ст.`);
 }
 
 function setHourlyContent(hourlyWeather) {
@@ -268,7 +270,8 @@ function getFalloutDescription(hourlyWeather, dailyWeather) {
             end = hourlyWeather[j].localTime.getHours();
             break;
         }
-    }  
+    }
+
     return `Ожидается ${fallout} с ${start}:00 по ${end}:00`;
 } 
 
