@@ -70,8 +70,8 @@ function parseDailyWeather(json) {
             condition: json.daily.weathercode[i],
             maxTemp: Math.round(parseFloat(json.daily.temperature_2m_max[i])),
             minTemp: Math.round(parseFloat(json.daily.temperature_2m_min[i])),
-            sunrise: json.daily.sunrise[i],
-            sunset: json.daily.sunset[i],
+            sunrise: getActualLocalDate(json, json.daily.sunrise[i]),
+            sunset: getActualLocalDate(json, json.daily.sunset[i]),
             precipitation: json.daily.precipitation_sum[i],
         });
     };
@@ -124,15 +124,15 @@ function getCurrentDailyWeather(dailyWeather) {
 }
 
 function getSunriseSunset(currentWeather, currentDailyWeather, dailyWeather) {
-    let currentDaySunrise = new Date(currentDailyWeather.sunrise);
-    let currentDaySunset = new Date(currentDailyWeather.sunset);
+    let currentDaySunrise = currentDailyWeather.sunrise;
+    let currentDaySunset = currentDailyWeather.sunset;
 
     if (currentWeather.isDay === 0 && new Date(currentWeather.localTime).getTime() <= currentDaySunrise.getTime()) {         // Утро, темно
-        return ['Восход', currentDailyWeather.sunrise.slice(-5), `Заход в: ${currentDailyWeather.sunset.slice(-5)}`];      
+        return ['Восход', currentDailyWeather.sunrise.toTimeString().slice(0, 5), `Заход в: ${currentDailyWeather.sunset.toTimeString().slice(0, 5)}`];      
     } else if (currentWeather.isDay === 1) {                                                                                 //День, светло
-        return ['Заход', currentDailyWeather.sunset.slice(-5), `Восход в: ${dailyWeather[1].sunrise.slice(-5)}`];
+        return ['Заход', currentDailyWeather.sunset.toTimeString().slice(0, 5), `Восход в: ${dailyWeather[1].sunrise.toTimeString().slice(0, 5)}`];
     } else if (currentWeather.isDay === 0 && new Date(currentWeather.localTime).getTime() > currentDaySunset.getTime()) {    //Вечер, темно
-        return ['Восход', dailyWeather[1].sunrise.slice(-5), `Заход в: ${dailyWeather[1].sunset.slice(-5)}`];
+        return ['Восход', dailyWeather[1].sunrise.toTimeString().slice(0, 5), `Заход в: ${dailyWeather[1].sunset.toTimeString().slice(0, 5)}`];
     }
 }
 
@@ -158,6 +158,7 @@ function getVisibilityTitle(currentHourlyWeather) {
             return visibilityTitles[i].title;
         }
     }
+    return 'Идеальная видимость';
 }
 
 function setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourlyWeather, dailyWeather, currentWeather) {
@@ -190,7 +191,6 @@ function setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourl
 
     setText('precipitation-sum', `${Math.round(parseFloat(currentDailyWeather.precipitation))} мм`);
     setText(`precipitation-forecast`, getFalloutDescription(hourlyWeather, dailyWeather));
-    
 
     setText('visibility-km', `${currentHourlyWeather.visibility} км`);
     setText('visibility-title', getVisibilityTitle(currentHourlyWeather));
@@ -198,6 +198,19 @@ function setContentToPage(city, currentHourlyWeather, currentDailyWeather, hourl
     setText('humidity-percentage', `${currentWeather.humidity} %`);
 
     setText('pressure', `${currentWeather.pressure} мм рт. ст.`);
+
+    const weathercode = currentHourlyWeather.condition;
+    let backgroundImage;
+    if (currentWeather.isDay) {
+        backgroundImage = weatherCodes[weathercode].backgroundDay;
+        document.documentElement.className = '';
+    } else {
+        backgroundImage = weatherCodes[weathercode].backgroundNight;
+        document.documentElement.className = 'night';
+    }
+    document.documentElement.style.backgroundImage = `url('${backgroundImage}')`;
+    
+    
 }
 
 function setHourlyContent(hourlyWeather) {

@@ -4,5 +4,4 @@ const visibilityTitles = [
     {max: 4, title: 'Легкий туман'},
     {max: 10, title: 'Дымка'},
     {max: 20, title: 'Хорошая видимость'},
-    {max: 25, title: 'Идеальная видимость'},
 ]

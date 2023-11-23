@@ -1,13 +1,19 @@
 html {
-    background-color: rgb(144, 205, 228);
     font-size: 20px;
     font-family: 'Helvetica';
+    background-attachment: fixed;
+    background-size: cover;
 }
 .block {
-    background-color: rgb(27, 155, 197);
+    background-color: rgba(83, 170, 199, 0.5);
     padding: 6px 18px;
     color: white;
     border-radius: 8px;
+    -webkit-backdrop-filter: blur(10px); 
+    backdrop-filter: blur(10px);
+}
+.night .block {
+    background-color: rgba(77, 77, 77, 0.5);
 }
 .col-max {
     grid-column: 1 / -1;
@@ -58,7 +64,7 @@ p {
 }
 .block-header {
     font-size: 15px;
-    color: rgb(196, 233, 246);
+    color: rgb(255, 255, 255, 0.5);
     text-transform: uppercase;
 }
 .main-grid {
