@@ -138,7 +138,7 @@ function getSunriseSunset(currentWeather, currentDailyWeather, dailyWeather) {
 
 function getWindDirection(currentWeather) {
     let direction = Math.round((parseInt(currentWeather.windDirection) / 22.5));
-
+    console.log(direction);
     return direction;
 }
 

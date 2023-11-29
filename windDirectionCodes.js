@@ -15,4 +15,5 @@ const windDirectionCodes = {
     14: 'СЗ',
     15: 'С',
     16: 'С',
+    0: 'С'
 }
