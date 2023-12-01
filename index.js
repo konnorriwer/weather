@@ -4,12 +4,13 @@ let longitude = 76.92861;
 if (localStorage.getItem('latitude') && localStorage.getItem('longitude')) {
     latitude = localStorage.getItem('latitude');
     longitude = localStorage.getItem('longitude');
+    city = localStorage.getItem('city');
 }
 
 async function getForecast(latitude, longitude) {
     const json = await getForecastFromAPI(latitude, longitude);
     
-    const city = getCityName(json);
+    const city = localStorage.getItem('city');
 
     const hourlyWeather = parseHourlyWeather(json);
     const currentHourlyWeather = getCurrentHourlyWeather(hourlyWeather);
@@ -29,20 +30,17 @@ async function getForecastFromAPI(latitude, longitude) {
 
 async function getCityFromAPI() {
     const city = document.getElementById("input").value;
-    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=en&format=json`;
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=ru&format=json`;
     const result = await fetch(url);
     const json = await result.json();
+    const cityName = json.results[0].name;
     const latitude = json.results[0].latitude;
     const longitude = json.results[0].longitude;
     localStorage.setItem('latitude', latitude);
     localStorage.setItem('longitude', longitude);
+    localStorage.setItem('city', cityName);
+    console.log(json);
     await getForecast(latitude, longitude);
-}
-
-function getCityName(json) {
-    const timezone = (json.timezone).split('/');
-    const city = timezone[1];
-    return city;
 }
 
 function parseHourlyWeather(json) {   
