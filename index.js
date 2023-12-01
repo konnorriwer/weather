@@ -1,5 +1,6 @@
 let latitude = 43.25667;
 let longitude = 76.92861;
+let city = 'Алматы';
 
 document.getElementById('input').addEventListener('keydown', (e) =>{
     if (e.keyCode === 13) {
