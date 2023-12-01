@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="fonts.css">
+</head>
+<body>
+
+    <div class="grid main-grid">
+        <div class="text-center block col-max search-block" >
+            <input type="text" id="input">
+            <button onclick="getCityFromAPI()">Выбрать</button>
+        </div>
+        <div class="block col-max">
+            <div class="text-center">
+                <p id="city">
+                    —————
+                </p>
+                <p id="current_temperature" class="font-50">
+                    ——°
+                </p>
+                <p id="current_condition">
+                    —————
+                </p>
+                <span id="max">
+                    Макс.: ——°, 
+                </span>
+                <span id="min">
+                    мин.: ——°
+                </span>
+            </div>
+        </div>
+        <div class="block col-2 col-4-lg">
+            <h2 class="block-header">
+                Почасовая погода
+            </h2>
+            <div class="grid grid-col-24 text-center grid-gap-10-32 overflow-x" id="hourly-weather">
+                <p id="hourly-hour-1">Сейчас</p>
+                <p id="hourly-hour-2">--</p>
+                <p id="hourly-hour-3">--</p>
+                <p id="hourly-hour-4">--</p>
+                <p id="hourly-hour-5">--</p>
+                <p id="hourly-hour-6">--</p>
+                <p id="hourly-hour-7">--</p>
+                <p id="hourly-hour-8">--</p>
+                <p id="hourly-hour-9">--</p>
+                <p id="hourly-hour-10">--</p>
+                <p id="hourly-hour-11">--</p>
+                <p id="hourly-hour-12">--</p>
+                <p id="hourly-hour-13">--</p>
+                <p id="hourly-hour-14">--</p>
+                <p id="hourly-hour-15">--</p>
+                <p id="hourly-hour-16">--</p>
+                <p id="hourly-hour-17">--</p>
+                <p id="hourly-hour-18">--</p>
+                <p id="hourly-hour-19">--</p>
+                <p id="hourly-hour-20">--</p>
+                <p id="hourly-hour-21">--</p>
+                <p id="hourly-hour-22">--</p>
+                <p id="hourly-hour-23">--</p>
+                <p id="hourly-hour-24">--</p>
+                <img class="icon" id="hourly-icon-1">
+                <img class="icon" id="hourly-icon-2">
+                <img class="icon" id="hourly-icon-3">
+                <img class="icon" id="hourly-icon-4">
+                <img class="icon" id="hourly-icon-5">
+                <img class="icon" id="hourly-icon-6">
+                <img class="icon" id="hourly-icon-7">
+                <img class="icon" id="hourly-icon-8">
+                <img class="icon" id="hourly-icon-9">
+                <img class="icon" id="hourly-icon-10">
+                <img class="icon" id="hourly-icon-11">
+                <img class="icon" id="hourly-icon-12">
+                <img class="icon" id="hourly-icon-13">
+                <img class="icon" id="hourly-icon-14">
+                <img class="icon" id="hourly-icon-15">
+                <img class="icon" id="hourly-icon-16">
+                <img class="icon" id="hourly-icon-17">
+                <img class="icon" id="hourly-icon-18">
+                <img class="icon" id="hourly-icon-19">
+                <img class="icon" id="hourly-icon-20">
+                <img class="icon" id="hourly-icon-21">
+                <img class="icon" id="hourly-icon-22">
+                <img class="icon" id="hourly-icon-23">
+                <img class="icon" id="hourly-icon-24">
+                <p id="hourly-temp-1">--</p>
+                <p id="hourly-temp-2">--</p>
+                <p id="hourly-temp-3">--</p>
+                <p id="hourly-temp-4">--</p>
+                <p id="hourly-temp-5">--</p>
+                <p id="hourly-temp-6">--</p>
+                <p id="hourly-temp-7">--</p>
+                <p id="hourly-temp-8">--</p>
+                <p id="hourly-temp-9">--</p>
+                <p id="hourly-temp-10">--</p>
+                <p id="hourly-temp-11">--</p>
+                <p id="hourly-temp-12">--</p>
+                <p id="hourly-temp-13">--</p>
+                <p id="hourly-temp-14">--</p>
+                <p id="hourly-temp-15">--</p>
+                <p id="hourly-temp-16">--</p>
+                <p id="hourly-temp-17">--</p>
+                <p id="hourly-temp-18">--</p>
+                <p id="hourly-temp-19">--</p>
+                <p id="hourly-temp-20">--</p>
+                <p id="hourly-temp-21">--</p>
+                <p id="hourly-temp-22">--</p>
+                <p id="hourly-temp-23">--</p>
+                <p id="hourly-temp-24">--</p>
+            </div>
+        </div>
+        <div class="block weekly-lg weekly">
+            <h2 class="block-header">
+                Погода на неделю
+            </h2>
+            <div class="grid grid-col-5 grid-gap-8-32 overflow-x">
+                <p id="daily-day-1">Сегодня</p>
+                <img class="icon" id="daily-icon-1">
+                <p id="daily-min-temp-1">--</p>
+                <p></p>
+                <p id="daily-max-temp-1">--</p>
+                <p id="daily-day-2">--</p>
+                <img class="icon" id="daily-icon-2">
+                <p id="daily-min-temp-2">--</p>
+                <p></p>
+                <p id="daily-max-temp-2">--</p>
+                <p id="daily-day-3">--</p>
+                <img class="icon" id="daily-icon-3">
+                <p id="daily-min-temp-3">--</p>
+                <p></p>
+                <p id="daily-max-temp-3">--</p>
+                <p id="daily-day-4">--</p>
+                <img class="icon" id="daily-icon-4">
+                <p id="daily-min-temp-4">--</p>
+                <p></p>
+                <p id="daily-max-temp-4">--</p>
+                <p id="daily-day-5">--</p>
+                <img class="icon" id="daily-icon-5">
+                <p id="daily-min-temp-5">--</p>
+                <p></p>
+                <p id="daily-max-temp-5">--</p>
+                <p id="daily-day-6">--</p>
+                <img class="icon" id="daily-icon-6">
+                <p id="daily-min-temp-6">--</p>
+                <p></p>
+                <p id="daily-max-temp-6">--</p>
+                <p id="daily-day-7">--</p>
+                <img class="icon" id="daily-icon-7">
+                <p id="daily-min-temp-7">--</p>
+                <p></p>
+                <p id="daily-max-temp-7">--</p>
+            </div>
+        </div>
+        <div class="block">
+            <h2 class="block-header">
+                УФ-индекс
+            </h2>
+            <div>
+                <p id="uv-number" class="font-32">
+                    —————
+                </p>
+                <p id="uv-title" class="font-20">
+                    —————
+                </p>
+                <p id="uv-description" class="font-16">
+                    —————
+                </p>
+            </div>
+        </div>
+        <div class="block">
+            <h2 class="block-header" id="sunset-or-sunrise">
+                Заход солнца
+            </h2>
+            <div>
+                <p id="first-sun-change" class="font-32">
+                    --:--
+                </p>
+                <p id="second-sun-change" class="font-16">
+                    --:--
+                </p>
+            </div>
+        </div>
+        <div class="block">
+            <h2 class="block-header">
+                Ветер
+            </h2>
+            <div>
+                <p id="wind-speed" class="font-32">
+                    —— м/с
+                </p>
+                <p id="wind-direction" class="font-16">
+                    ——
+                </p>
+                <p id="wind-gusts" class="font-16">
+                    —— м/с
+                </p>
+            </div>
+        </div>
+        <div class="block">
+            <h2 class="block-header">
+                Ощущается как
+            </h2>
+            <div>
+                <p id="apparent-temperature" class="font-32">
+                    ——° 
+                </p>
+                <p id="actual-temperature" class="font-20">
+                    ————
+                </p>
+                <p id="temperature-difference" class="font-16">
+                    ————
+                </p>
+            </div>
+        </div>
+
+        <div class="block">
+            <h2 class="block-header">
+                Осадки
+            </h2>
+            <div>
+                <p id="precipitation-sum" class="font-32">
+                    — мм
+                </p>
+                <p class="font-16">
+                    за последние 24 ч
+                </p>
+                <p id="precipitation-forecast" class="font-16">
+                    ————
+                </p>
+            </div>
+        </div>
+        <div class="block">
+            <h2 class="block-header">
+                Видимость
+            </h2>
+            <div>
+                <p id="visibility-km" class="font-32">
+                    ———— км
+                </p>
+                <p id="visibility-title" class="font-20">
+                    ————
+                </p>
+            </div>
+        </div>
+        <div class="block">
+            <h2 class="block-header">
+                Влажность
+            </h2>
+            <div>
+                <p id="humidity-percentage" class="font-32">
+
+                </p>
+            </div>
+        </div>
+        <div class="block">
+            <h2 class="block-header">
+                Давление
+            </h2>
+            <div>
+                <p id="pressure" class="font-32">
+                    ———— мм рт. ст.
+                </p>
+            </div>
+        </div>
+    </div>
+    <script src="index.js"></script>
+    <script src="weatherCodes.js"></script>
+    <script src="windDirectionCodes.js"></script>
+    <script src="visibilityTitles.js"></script>
+</body>
+</html>

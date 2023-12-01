@@ -1,0 +1,139 @@
+html {
+    font-size: 20px;
+    font-family: 'Helvetica';
+    background-attachment: fixed;
+    background-size: cover;
+}
+.block {
+    background-color: rgba(83, 170, 199, 0.5);
+    padding: 6px 18px;
+    color: white;
+    border-radius: 8px;
+    -webkit-backdrop-filter: blur(10px); 
+    backdrop-filter: blur(10px);
+}
+.night .block {
+    background-color: rgba(77, 77, 77, 0.5);
+}
+.col-max {
+    grid-column: 1 / -1;
+}
+.col-2 {
+    grid-column: span 2;
+}
+.weekly {
+    grid-row: 4 / 6;
+    grid-column: span 2;
+}
+.search-block {
+    height: 28px;
+    align-self: end;
+}
+#current_temp {
+    font-size: 45px;
+    font-weight: 200;
+    line-height: 33px;
+}
+#current_condition, #min, #max, #current_apparent_temperature {
+    font-size: 16px;
+    font-weight: 500;
+}
+#city {
+    font-size: 30px;
+}
+p {
+    margin: 8px 0;
+}
+.grid {
+    display: grid;
+}
+.grid-col-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+.grid-col-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+.grid-col-24 {
+    grid-template-columns: repeat(24, 1fr);
+}
+.grid-col-5 {
+    grid-template-columns: 2fr 1fr 1fr 3fr 1fr;
+}
+.text-center {
+    text-align: center;
+}
+.block-header {
+    font-size: 15px;
+    color: rgb(255, 255, 255, 0.5);
+    text-transform: uppercase;
+}
+.main-grid {
+    grid-template-columns: repeat(2, 180px);
+    grid-template-rows: repeat(10, 180px);
+    gap: 16px;
+    justify-content: center;
+}
+.icon {
+    width: 30px;
+    height: 30px;
+    place-self: center;
+}
+
+
+.grid-gap-10-32 {
+    grid-gap: 10px 32px;
+}
+.grid-gap-8-32 {
+    grid-gap: 8px 32px;
+}
+.overflow-x {
+    overflow: auto;
+}
+#hourly-weather::-webkit-scrollbar {
+    display: none;
+}
+.font-50 {
+    font-size: 50px;
+}
+.font-32 {
+    font-size: 32px;
+}
+.font-28 {
+    font-size: 28px;
+}
+.font-20 {
+    font-size: 20px;
+}
+.font-16 {
+    font-size: 16px;
+}
+@media screen and (min-width: 810px) and (max-width: 1204px) {
+    .main-grid {
+        grid-template-columns: repeat(4, 180px);
+        grid-template-rows: repeat(10, 180px);
+    }
+    .col-4-lg {
+        grid-column: span 4;
+    }
+    .weekly-lg{
+        grid-row-start: 4;
+        grid-row-end: 6;
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+}
+@media screen and (min-width: 1205px) {
+    .main-grid {
+        grid-template-columns: repeat(6, 180px);
+        grid-template-rows: repeat(10, 180px);
+    }
+    .col-4-lg {
+        grid-column: span 4;
+    }
+    .weekly-lg{
+        grid-row-start: 4;
+        grid-row-end: 6;
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+}
