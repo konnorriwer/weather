@@ -1,6 +1,12 @@
 let latitude = 43.25667;
 let longitude = 76.92861;
 
+document.getElementById('input').addEventListener('keydown', (e) =>{
+    if (e.keyCode === 13) {
+        getCityFromAPI();
+    }
+});
+
 if (localStorage.getItem('latitude') && localStorage.getItem('longitude')) {
     latitude = localStorage.getItem('latitude');
     longitude = localStorage.getItem('longitude');
